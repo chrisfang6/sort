@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="green_fab">#ff81e01b</color>
+    <color name="green_fab_pressed">#ff68c603</color>
+    <color name="green_fab_ripple">#ffb2ec74</color>
+    <color name="gray_fab">#ffdadcdc</color>
+    <color name="gray_fab_pressed">#ffaeb0b0</color>
+    <color name="gray_fab_ripple">#ffe8eaea</color>
+</resources>

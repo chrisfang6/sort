@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_item_insert"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_insertion_txt" />
+    <item
+        android:id="@+id/menu_item_bubble"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_bubble_txt" />
+    <item
+        android:id="@+id/menu_item_merge"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_merge_txt" />
+    <item
+        android:id="@+id/menu_item_selection"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_selection_txt" />
+    <item
+        android:id="@+id/menu_item_heap"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_heap_txt" />
+    <item
+        android:id="@+id/menu_item_bucket"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_bucket_txt" />
+    <item
+        android:id="@+id/menu_item_quick"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_quick_txt" />
+    <item
+        android:id="@+id/menu_item_counting"
+        android:icon="@drawable/ic_menu_send"
+        android:title="@string/sort_counting_txt" />
+    <item
+        android:id="@+id/menu_item_radix"
+        android:icon="@drawable/ic_menu_send"
+        android:title="@string/sort_radix_txt" />
+
+</menu>

@@ -1,0 +1,21 @@
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">Sort</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="sort_insertion_txt">Insertion Sort</string>
+    <string name="sort_bubble_txt">Bubble Sort</string>
+    <string name="sort_merge_txt">Merge Sort</string>
+    <string name="sort_selection_txt">Selection Sort</string>
+    <string name="sort_heap_txt">Heap Sort</string>
+    <string name="sort_bucket_txt">Bucket Sort</string>
+    <string name="sort_quick_txt">Quick Sort</string>
+    <string name="sort_counting_txt">Counting Sort</string>
+    <string name="sort_radix_txt">Radix Sort</string>
+    
+    <string name="sort_hint_txt"><xliff:g>%s</xliff:g> by <xliff:g>%s</xliff:g>.</string>
+
+</resources>
