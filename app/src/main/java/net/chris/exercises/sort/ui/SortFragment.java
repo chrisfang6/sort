@@ -4,9 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +21,8 @@ import net.chris.exercises.sort.R;
 import net.chris.exercises.sort.databinding.FragmentSortBinding;
 import net.chris.exercises.sort.inject.FragmentComponent;
 import net.chris.exercises.sort.ui.model.SortViewModel;
-import net.chris.exercises.sort.ui.recycler.ChartAdapter;
 import net.chris.exercises.sort.ui.recycler.BaseRecyclerAdapter;
+import net.chris.exercises.sort.ui.recycler.ChartAdapter;
 
 import javax.inject.Inject;
 
@@ -26,7 +30,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static net.chris.exercises.sort.Constants.TAG_SORT_FRAGMENT;
+
 public class SortFragment extends RxFragment {
+
+    private static final String TAG = SortFragment.class.getSimpleName();
 
     @Inject
     SortViewModel sortViewModel;
@@ -90,5 +98,53 @@ public class SortFragment extends RxFragment {
         sortViewModel.updateAdapter.removeOnPropertyChangedCallback(callback);
         sortViewModel.unregister();
     }
+
+    public static void createAndResume(@NonNull final FragmentManager fragmentManager, @NonNull final int fragment_container, @NonNull final Bundle args) {
+        Fragment fragment = new SortFragment();
+        fragment.setArguments(new Bundle());
+        if (args != null) {
+            fragment.getArguments().putAll(args);
+        }
+        fragmentManager.beginTransaction().add(fragment_container, fragment, TAG_SORT_FRAGMENT).commit();
+    }
+
+    public static void createOrResume(@NonNull final FragmentManager fragmentManager, @NonNull final int fragment_container, @NonNull final Bundle args) {
+        if (isOnTop(fragmentManager, TAG_SORT_FRAGMENT) || isFragmentVisible(fragmentManager, TAG_SORT_FRAGMENT)) {
+            SortFragment fragment = (SortFragment) fragmentManager.findFragmentByTag(TAG_SORT_FRAGMENT);
+            Bundle arguments = fragment.getArguments();
+            arguments.putAll(args);
+            fragment.sortViewModel.register(fragment);
+            return;
+        }
+        Fragment fragment = new SortFragment();
+        fragment.setArguments(new Bundle());
+        if (args != null) {
+            fragment.getArguments().putAll(args);
+        }
+        fragmentManager.beginTransaction().replace(fragment_container, fragment, TAG_SORT_FRAGMENT).commit();
+    }
+
+    protected static boolean isFragmentVisible(@NonNull FragmentManager fragmentManager, @NonNull final String tag) {
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+        return fragment != null && fragment.isVisible();
+    }
+
+    protected static boolean isOnTop(@NonNull final FragmentManager fragmentManager, @NonNull final String tag) {
+        try {
+            final int backStackCount = fragmentManager.getBackStackEntryCount();
+            if (backStackCount < 1) {
+                return false;
+            }
+            final String topTag = fragmentManager.getBackStackEntryAt(backStackCount - 1).getName();
+            if (tag.equals(topTag)) {
+                Log.w(TAG, String.format("Current fragment (%s) is on the screen.", tag));
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "err", e);
+        }
+        return false;
+    }
+
 
 }

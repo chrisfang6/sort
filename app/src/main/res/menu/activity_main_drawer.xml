@@ -22,13 +22,13 @@
         android:icon="@drawable/ic_menu_share"
         android:title="@string/sort_heap_txt" />
     <item
-        android:id="@+id/menu_item_bucket"
-        android:icon="@drawable/ic_menu_share"
-        android:title="@string/sort_bucket_txt" />
-    <item
         android:id="@+id/menu_item_quick"
         android:icon="@drawable/ic_menu_share"
         android:title="@string/sort_quick_txt" />
+    <item
+        android:id="@+id/menu_item_bucket"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/sort_bucket_txt" />
     <item
         android:id="@+id/menu_item_counting"
         android:icon="@drawable/ic_menu_send"

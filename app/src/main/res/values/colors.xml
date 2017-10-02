@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="color_bg_java">#af87CEFA</color>
+    <color name="color_bg_jni">#aff8f300</color>
+    <color name="color_bg_kotlin">#a1ccf500</color>
 </resources>

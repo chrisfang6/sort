@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="net.chris.exercises.sort.ui.model.SortViewModel"/>
+
+        <import type="net.chris.exercises.sort.ui.model.SortViewModel" />
+
         <variable
             name="viewModel"
-            type="SortViewModel"/>
+            type="SortViewModel" />
     </data>
 
 
@@ -20,8 +22,8 @@
             android:id="@+id/sort_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{@string/sort_hint_txt(viewModel.sortDescription.sortTypeName.get(), viewModel.byJni.get() ? `JNI` : `JAVA`)}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:text="@{@string/sort_hint_txt(viewModel.sortDescription.sortTypeName.get(), `JAVA`)}"
             tools:text="JAVA: Merge sort" />
 
         <android.support.v7.widget.RecyclerView
@@ -29,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#87CEFA" />
+            android:background="@{viewModel.byJni.get() ? @color/color_bg_jni :@color/color_bg_java }" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,17 +43,17 @@
                 android:id="@+id/reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="reset"
                 android:enabled="@{viewModel.enableResetButtons}"
-                bind:onClick="@{viewModel.reset}"/>
+                android:text="reset"
+                bind:onClick="@{viewModel.reset}" />
 
             <Button
                 android:id="@+id/start_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="start"
                 android:enabled="@{viewModel.enableStartButtons}"
-                bind:onClick="@{viewModel.startSort}"/>
+                android:text="start"
+                bind:onClick="@{viewModel.startSort}" />
         </LinearLayout>
     </LinearLayout>
 </layout>

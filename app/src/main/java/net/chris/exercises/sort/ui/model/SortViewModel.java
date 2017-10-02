@@ -24,6 +24,15 @@ import net.chris.lib.algorithms.sort.RadixSorter;
 import net.chris.lib.algorithms.sort.SelectionSorter;
 import net.chris.lib.algorithms.sort.Sorter;
 import net.chris.lib.algorithms.sort.Updatable;
+import net.chris.lib.algorithms.sort.jni.integer.BubbleSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.BucketSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.CountingSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.HeapSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.InsertionSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.MergeSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.QuickSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.RadixSorterIntegerByJni;
+import net.chris.lib.algorithms.sort.jni.integer.SelectionSorterIntegerByJni;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -39,6 +48,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static net.chris.exercises.sort.Constants.INTENT_KEY_SORTED_BY_JNI;
 
 public class SortViewModel {
 
@@ -64,8 +75,28 @@ public class SortViewModel {
     CountingSorter countingSorter;
     @Inject
     RadixSorter radixSorter;
+    @Inject
+    InsertionSorterIntegerByJni insertionSorterIntegerByJni;
+    @Inject
+    BubbleSorterIntegerByJni bubbleSorterIntegerByJni;
+    @Inject
+    SelectionSorterIntegerByJni selectionSorterIntegerByJni;
+    @Inject
+    MergeSorterIntegerByJni mergeSorterIntegerByJni;
+    @Inject
+    QuickSorterIntegerByJni quickSorterIntegerByJni;
+    @Inject
+    HeapSorterIntegerByJni heapSorterIntegerByJni;
+    @Inject
+    BucketSorterIntegerByJni bucketSorterIntegerByJni;
+    @Inject
+    CountingSorterIntegerByJni countingSorterIntegerByJni;
+    @Inject
+    RadixSorterIntegerByJni radixSorterIntegerByJni;
 
     private Constants.Type type = Type.INSERTION_SORT;
+
+    private final ObservableBoolean byJni = new ObservableBoolean(false);
 
     private final CopyOnWriteArrayList<Integer> items = new CopyOnWriteArrayList<>();
 
@@ -121,7 +152,9 @@ public class SortViewModel {
     }
 
     private void stopListen() {
-        typeDisposable.dispose();
+        if (typeDisposable != null) {
+            typeDisposable.dispose();
+        }
     }
 
     private void startSort() {
@@ -154,32 +187,35 @@ public class SortViewModel {
         Sorter<Integer> sorter = null;
         switch (type) {
             case QUICK_SORT:
-                sorter = quickSorter;
+                sorter = byJni.get() ? quickSorterIntegerByJni : quickSorter;
                 break;
             case INSERTION_SORT:
-                sorter = insertionSorter;
+                sorter = byJni.get() ? insertionSorterIntegerByJni : insertionSorter;
                 break;
             case MERGE_SORT:
-                sorter = mergeSorter;
+                sorter = byJni.get() ? mergeSorterIntegerByJni : mergeSorter;
                 break;
             case BUBBLE_SORT:
-                sorter = bubbleSorter;
+                sorter = byJni.get() ? bubbleSorterIntegerByJni : bubbleSorterIntegerByJni;
                 break;
             case COUNTING_SORT:
-                sorter = countingSorter;
+                sorter = byJni.get() ? countingSorterIntegerByJni : countingSorter;
                 break;
             case SELECTION_SORT:
-                sorter = selectionSorter;
+                sorter = byJni.get() ? selectionSorterIntegerByJni : selectionSorter;
                 break;
             case HEAP_SORT:
-                sorter = heapSorter;
+                sorter = byJni.get() ? heapSorterIntegerByJni : heapSorter;
                 break;
             case BUCKET_SORT:
-                sorter = bucketSorter;
+                sorter = byJni.get() ? bucketSorterIntegerByJni : bucketSorter;
                 break;
             case RADIX_SORT:
-                sorter = radixSorter;
+                sorter = byJni.get() ? radixSorterIntegerByJni : radixSorter;
                 break;
+        }
+        if (sorter == null) {
+            return items;
         }
         return sorter.setUpdate(true).setUpdatable(updatable).sort(items);
     }
@@ -197,9 +233,13 @@ public class SortViewModel {
     }
 
     public void register(final RxFragment fragment) {
+        boolean same = context != null ? context.get() == fragment : false;
         context = (fragment == null) ? null : new WeakReference<>(fragment);
         if (fragment != null) {
-            startListen();
+            byJni.set(byJni(fragment));
+            if (!same) {
+                startListen();
+            }
         }
     }
 
@@ -208,12 +248,23 @@ public class SortViewModel {
         context = null;
     }
 
+    private boolean byJni(RxFragment fragment) {
+        if (fragment != null && fragment.getArguments() != null) {
+            return fragment.getArguments().getBoolean(INTENT_KEY_SORTED_BY_JNI);
+        }
+        return false;
+    }
+
     public CopyOnWriteArrayList<Integer> getItems() {
         return items;
     }
 
     public SortDescription getSortDescription() {
         return sortDescription;
+    }
+
+    public ObservableBoolean getByJni() {
+        return byJni;
     }
 
     @BindingAdapter("app:layout_heightPercent")

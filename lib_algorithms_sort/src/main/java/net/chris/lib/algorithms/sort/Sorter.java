@@ -60,7 +60,7 @@ public abstract class Sorter<T> {
         return list;
     }
 
-    protected abstract void subSort(final T[] list);
+    protected abstract void subSort(final T[] array);
 
     /**
      * @param first

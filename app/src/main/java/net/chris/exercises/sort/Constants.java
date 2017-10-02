@@ -5,6 +5,9 @@ public interface Constants {
     int MAX_ITEM_COUNT = 20;
     int INTERVAL = 500;
 
+    String TAG_SORT_FRAGMENT = "sort fragment";
+    String TAG_KOTLIN_SORT_FRAGMENT = "kotlin sort fragment";
+
     enum Type {
         INSERTION_SORT,
         BUBBLE_SORT,
@@ -40,4 +43,6 @@ public interface Constants {
             return null;
         }
     }
+
+    String INTENT_KEY_SORTED_BY_JNI = "INTENT_KEY_SORTED_BY_JNI";
 }

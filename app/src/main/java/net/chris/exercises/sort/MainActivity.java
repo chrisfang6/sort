@@ -26,6 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static net.chris.exercises.sort.Constants.INTENT_KEY_SORTED_BY_JNI;
+import static net.chris.exercises.sort.Constants.TAG_KOTLIN_SORT_FRAGMENT;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Inject
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new SortFragment(), "sort fragment").commit();
+        SortFragment.createAndResume(getSupportFragmentManager(), R.id.fragment_container, null);
     }
 
     @Override
@@ -126,17 +129,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @OnClick({R.id.menu_java_button, R.id.menu_kotlin_button})
+    @OnClick({R.id.menu_java_button, R.id.menu_java_jni_button, R.id.menu_kotlin_button})
     public void onClick(View view) {
+        Bundle args = new Bundle();
         switch (view.getId()) {
             case R.id.menu_java_button:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SortFragment(), "sort fragment").commit();
+                args.putBoolean(INTENT_KEY_SORTED_BY_JNI, false);
+                SortFragment.createOrResume(getSupportFragmentManager(), R.id.fragment_container, args);
+                break;
+            case R.id.menu_java_jni_button:
+                args.putBoolean(INTENT_KEY_SORTED_BY_JNI, true);
+                SortFragment.createOrResume(getSupportFragmentManager(), R.id.fragment_container, args);
                 break;
             case R.id.menu_kotlin_button:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, KTSortFragment.Companion.newInstance(), "kotlin sort fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, KTSortFragment.Companion.newInstance(), TAG_KOTLIN_SORT_FRAGMENT).commit();
                 break;
         }
         floatingActionMenu.close(true);
     }
+
 
 }
